@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import User from '../model/users.js';
 import Parent from '../model/parents.js';
 import authMiddleware from '../middleware/auth.js';
+import blacklistedtoken from '../model/blacklistedtoken.js';
 
 dotenv.config();
 
@@ -35,7 +36,7 @@ authRouter.post('/register', async (req, res) => {
             name: generateRandomName(),
             phone: "N/A",
             address: "N/A",
-            gender: "other",
+            gender: "Khác",
         });
         await parent.save();
 
@@ -108,7 +109,7 @@ authRouter.post('/logout', authMiddleware, async (req, res) => {
         const authHeader = req.headers.authorization;
         const token = authHeader.split(' ')[1];
 
-        await BlacklistedToken.create({ token });
+        await blacklistedtoken.create({ token });
 
         res.status(200).json({ message: 'Logout successful' });
     } catch (err) {

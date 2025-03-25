@@ -5,7 +5,6 @@ import VaccineSlot from '../model/slotVaccine.js';
 
 const vaccineRouter = express.Router();
 
-// Create a new vaccine
 vaccineRouter.post('/create', async (req, res) => {
     try {
         const {
@@ -14,12 +13,10 @@ vaccineRouter.post('/create', async (req, res) => {
             ageGroup,
             dosesRequired,
             price,
-            quantity,
-            status
-        } = req.body;
+            quantity
+        } = req.body; 
 
-        // Auto-generate a vaccineId
-        const vaccineId = `VAC-${uuidv4().split('-')[0].toUpperCase()}`; // e.g. VAC-3F1A2B
+        const vaccineId = `VAC-${uuidv4().split('-')[0].toUpperCase()}`;
 
         const newVaccine = new Vaccine({
             vaccineId,
@@ -28,8 +25,7 @@ vaccineRouter.post('/create', async (req, res) => {
             ageGroup,
             dosesRequired,
             price,
-            quantity,
-            status
+            quantity 
         });
 
         await newVaccine.save();
@@ -40,7 +36,6 @@ vaccineRouter.post('/create', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
 vaccineRouter.post('/create-slot', async (req, res) => {
     try {
         const { date, startTime, endTime, capacity } = req.body;
@@ -54,7 +49,7 @@ vaccineRouter.post('/create-slot', async (req, res) => {
             startTime,
             endTime,
             capacity,
-            available_capacity: capacity // Initially, available capacity is equal to total capacity
+            available_capacity: capacity
         });
 
         await newSlot.save();
