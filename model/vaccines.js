@@ -22,6 +22,12 @@ const vaccineSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    intervalMonths: {
+      type: Number,
+    },
+    intervalDays: {
+      type: Number,
+    },
     price: {
       type: Number,
       required: true,
@@ -40,6 +46,7 @@ const vaccineSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Middleware để cập nhật trạng thái vaccine dựa trên số lượng còn lại
 vaccineSchema.pre('save', function (next) {
   if (this.quantity <= 0) {
     this.status = 'Hết';
@@ -48,7 +55,7 @@ vaccineSchema.pre('save', function (next) {
   } else {
     this.status = 'Còn nhiều';
   }
-  next(); // tiếp tục lưu thông tin
+  next();
 });
 
 const Vaccine = mongoose.model('Vaccine', vaccineSchema);

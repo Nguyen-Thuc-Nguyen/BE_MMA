@@ -7,10 +7,12 @@ const vaccineRouter = express.Router();
 
 vaccineRouter.post('/create', async (req, res) => {
   try {
-    const { name, description, ageGroup, dosesRequired, price, quantity } =
-      req.body;
+    const { name, description, ageGroup, dosesRequired, price, quantity, intervalMonths, intervalDays } = req.body;
 
     const vaccineId = `VAC-${uuidv4().split('-')[0].toUpperCase()}`;
+
+    const finalIntervalDays = intervalDays ?? 0;
+    const finalIntervalMonths = intervalDays ? 0 : (intervalMonths ?? 1);
 
     const newVaccine = new Vaccine({
       vaccineId,
@@ -20,18 +22,20 @@ vaccineRouter.post('/create', async (req, res) => {
       dosesRequired,
       price,
       quantity,
+      intervalMonths: finalIntervalMonths,
+      intervalDays: finalIntervalDays,
     });
 
     await newVaccine.save();
 
-    res
-      .status(201)
-      .json({ message: 'Vaccine created successfully', vaccine: newVaccine });
+    res.status(201).json({ message: 'Vaccine created successfully', vaccine: newVaccine });
   } catch (err) {
     console.error('Error creating vaccine:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 vaccineRouter.post('/create-slot', async (req, res) => {
   try {
     const { date, startTime, endTime, capacity } = req.body;
