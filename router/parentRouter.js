@@ -4,6 +4,7 @@ import Parent from '../model/parents.js';
 import dotenv from 'dotenv';
 import Child from '../model/childrens.js';
 import authMiddleware from '../middleware/auth.js';
+import Appointment from '../model/appointment.js';
 
 
 dotenv.config();
@@ -122,5 +123,43 @@ parentRouter.put('/child/update', authMiddleware, async (req, res) => {
     }
 });
 
+parentRouter.post('/appointment/create', authMiddleware, async (req, res) => {
+    try {
+        const { slotId, childId, parentId, vaccineId, appointmentDate, doseNumber } = req.body;
 
+        if (!slotId || !childId || !parentId || !vaccineId || !appointmentDate || !doseNumber) {
+            return res.status(400).json({ message: "All required fields must be provided" });
+        }
+
+        // Check if parent exists
+        const parentExists = await Parent.findById(parentId);
+        if (!parentExists) {
+            return res.status(404).json({ message: "Parent not found" });
+        }
+
+        // Check if child exists and belongs to parent
+        const childExists = await Child.findById(childId);
+        if (!childExists || childExists.parentId.toString() !== parentId) {
+            return res.status(403).json({ message: "Child not found or does not belong to parent" });
+        }
+
+        const newAppointment = new Appointment({
+            slotId,
+            childId,
+            parentId,
+            vaccineId,
+            appointmentDate,
+            doseNumber,
+            status: "Chờ xác nhận",
+            paymentStatus: "Chưa thanh toán",
+        });
+
+        await newAppointment.save();
+        res.status(201).json({ message: "Appointment created successfully", appointment: newAppointment });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error creating appointment", error: error.message });
+    }
+});
 export default parentRouter;

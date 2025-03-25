@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ["Hoạt động", "Không hoạt động", "Bị ban"],
-        default: "active",
+        default: "Không hoạt động",
     },
     createdAt: {
         type: Date,
