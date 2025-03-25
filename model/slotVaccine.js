@@ -1,29 +1,32 @@
 import mongoose from 'mongoose';
 
-const VaccineSlotSchema = new mongoose.Schema({
+const VaccineSlotSchema = new mongoose.Schema(
+  {
     date: {
-        type: Date,
-        required: true
+      type: Date,
+      required: true,
     },
     startTime: {
-        type: String, 
-        required: true
+      type: String,
+      required: true,
     },
     endTime: {
-        type: String, 
-        required: true
+      type: String,
+      required: true,
     },
     capacity: {
-        type: Number,
-        required: true,
-        min: 1
+      type: Number,
+      required: true,
+      min: 1,
     },
     available_capacity: {
-        type: Number,
-        required: true,
-        min: 0
-    }
-}, { timestamps: true });
+      type: Number,
+      required: true,
+      min: 0,
+    },
+  },
+  { timestamps: true }
+);
 
 const VaccineSlot = mongoose.model('VaccineSlot', VaccineSlotSchema);
 

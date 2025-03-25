@@ -1,10 +1,10 @@
-import dotenv from "dotenv"
+import dotenv from 'dotenv';
 const loadEnv = () => {
-    const result = dotenv.config();
-    if (result.error) {
-        throw result.error;
-    }
-    console.log('Environment variables loaded');
+  const result = dotenv.config();
+  if (result.error) {
+    throw result.error;
+  }
+  console.log('Environment variables loaded');
 };
 
-export default loadEnv
+export default loadEnv;
